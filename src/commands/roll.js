@@ -3,10 +3,11 @@ const { createCanvas, loadImage } = require('canvas');
 const crypto = require('crypto');
 const path = require('path');
 
-async function rollDice(diceResults) {
+async function generateImage(diceResults) {
     const folder = path.join(__dirname, '../assets/');
     const canvas = createCanvas(diceResults.length * 100, 100); // Adjust size based on number of dice
     const ctx = canvas.getContext('2d');
+
 
     for (let i in diceResults) {
         const result = diceResults[i];
@@ -14,8 +15,7 @@ async function rollDice(diceResults) {
         ctx.drawImage(image, i * 100, 0, 100, 100); // Adjust spacing as needed
     }
 
-    const attachment = new AttachmentBuilder(canvas.toBuffer(), { name: 'dice-roll.png' });
-    return attachment;
+    return new AttachmentBuilder(canvas.toBuffer(), { name: 'dice-roll.png' });
 }
 
 module.exports = {
@@ -49,21 +49,18 @@ module.exports = {
                 name: `${interaction.user.displayName}`,
                 iconURL: interaction.user.displayAvatarURL()
             })
-            .setImage('attachment://dice.png')
-
+            .setImage('attachment://dice-roll.png')
+            .setDescription(`Đã gieo ${numberOfDice} viên xúc xắc`)
+            .addFields(
+                { name: 'Kết Quả', value: `[${rolls.join(', ')}]`, inline: true },
+            )
             // .setTimestamp()
             .setFooter({ 
-                text: `“Xúc xắc đã gieo, vận mệnh đã định. Lời vàng ngọc tạc, nhật nguyệt chứng minh”`,
+                text: `“Xúc xắc đã gieo, vận mệnh đã định.
+                 Lời vàng ngọc tạc, Nhật Nguyệt trường minh”`,
             })
         ;
 
-        embed
-            .setDescription(`Đã gieo ${numberOfDice} viên xúc xắc`)
-            .addFields(
-                { name: 'Kết Quả', value: `[${rolls.join(', ')}]`, inline: true }
-            )
-        ;
-        
 
         if (numberOfDice > 1) {
             embed
@@ -73,7 +70,7 @@ module.exports = {
                 );
         }
 
-        const attachment = await rollDice(rolls);
+        const attachment = await generateImage(rolls);
 
         await interaction.reply({ embeds: [embed], files: [attachment] });
     }
