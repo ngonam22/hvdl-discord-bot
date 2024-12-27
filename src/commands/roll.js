@@ -34,10 +34,14 @@ module.exports = {
         
         let rolls = [];
         let total = 0;
+        let successCount = 0;
 
         // Roll the dice
         for (let i = 0; i < numberOfDice; i++) {
-            const roll = crypto.randomInt(1, 7);
+            const roll = crypto.randomInt(1, 11);
+            if (roll > 6) {
+                successCount++;
+            }
             rolls.push(roll);
             total += roll;
         }
@@ -52,7 +56,9 @@ module.exports = {
             .setImage('attachment://dice-roll.png')
             .setDescription(`Đã gieo ${numberOfDice} viên xúc xắc`)
             .addFields(
-                { name: 'Kết Quả', value: `[${rolls.join(', ')}]`, inline: true },
+                {
+                    name: 'Kết Quả', value: `${rolls.map(roll => roll > 6 ? '**' + roll + '**' : roll).join(', ')}`, inline: true
+                },
             )
             // .setTimestamp()
             .setFooter({ 
@@ -66,7 +72,7 @@ module.exports = {
             embed
                 .addFields(
                     { name: 'Tổng', value: total.toString(), inline: true },
-                    { name: 'Trung Bình', value: (total / numberOfDice).toFixed(2), inline: true }
+                    { name: 'Thành Công', value: '**' + successCount.toString() + '**', inline: true }
                 );
         }
 
