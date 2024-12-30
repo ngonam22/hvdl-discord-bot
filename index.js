@@ -1,6 +1,9 @@
 const { Client, GatewayIntentBits, Events } = require('discord.js');
 const { loadEvents } = require('./src/handlers/eventHandler');
 const { loadCommands } = require('./src/handlers/commandHandler');
+const express = require('express')
+
+
 
 
 const client = new Client({
@@ -43,3 +46,14 @@ client.on(Events.InteractionCreate, async interaction => {
 
 // Login to Discord with your app's token
 client.login(process.env.TOKEN);
+
+const app = express()
+const port = process.env.PORT || 3000;
+
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
