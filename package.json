@@ -1,20 +1,14 @@
 {
-  "name": "hvdl-bot",
+  "name": "hvdl-monorepo",
+  "private": true,
   "version": "1.0.0",
-  "main": "index.js",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "canvas": "^2.11.2",
-    "discord.js": "^14.16.3",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2"
-  },
-  "devDependencies": {
-    "eslint": "^9.17.0"
+    "dev:web": "npm run dev -w packages/owlbear-extension",
+    "dev:bot": "npm run dev -w packages/discord-bot",
+    "build": "npm run build --workspaces",
+    "deploy:bot": "npm run deploy -w packages/discord-bot"
   }
 }

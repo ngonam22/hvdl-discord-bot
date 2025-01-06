@@ -36,7 +36,6 @@ loadCommandsFromDir(commandsPath);
 
 // Construct and prepare an instance of the REST module
 const rest = new REST().setToken(process.env.TOKEN);
-
 // Deploy commands
 (async () => {
     try {
@@ -50,6 +49,7 @@ const rest = new REST().setToken(process.env.TOKEN);
 
         console.log(`Successfully reloaded ${data.length} application (/) commands.`);
     } catch (error) {
+        console.log('++++++++')
         console.error(error);
     }
 })();
