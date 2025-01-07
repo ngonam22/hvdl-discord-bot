@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router"
 import MainLayout from "../layouts/MainLayout"
-import Home from "../pages/Home"
+import HomePage from "../pages/Home"
+import HistoryPage from "../pages/History"
 
 // const routes = [
 //     {
@@ -13,7 +14,8 @@ export default function CustomRoute() {
     return (
         <Routes>
             <Route element={<MainLayout />}>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<HomePage />} />
+                <Route path="/history" element={<HistoryPage />} />
             </Route>
         </Routes>
     )

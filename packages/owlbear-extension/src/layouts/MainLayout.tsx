@@ -1,12 +1,13 @@
 import { Outlet } from "react-router";
+import Nav from "../components/layouts/MainLayout/Nav";
 
 export default function MainLayout() {
     return (
-        <div>
-            <header>Main Header</header>
-            <main>
+        <>
+            <Nav />
+            <main className="">
                 <Outlet />
             </main>
-        </div>
+        </>
     )
 }
