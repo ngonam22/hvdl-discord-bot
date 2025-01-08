@@ -1,11 +1,11 @@
 import { Slider } from "antd";
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { rollDice, type RollResult } from '@hldv/hldv-utility';
 
 
 function renderButton({ times, rollDice }) {
     return (
-        <div className="text-center mb-4">
+        <div className="text-center mb-4 text-black">
             <button className="flex space-x-1 mx-auto items-center" onClick={rollDice}>
                 <img src="https://witchdice.com/static/media/d6.7948cd9e.svg" width={50} height={50} />
                 <span>x</span>
@@ -16,6 +16,15 @@ function renderButton({ times, rollDice }) {
 }
 
 function RenderResult({ result, onReset }: { result?: RollResult, onReset: () => void }) {
+    const [isRolling, setIsRolling] = useState(false);
+
+    // Trigger animation when result changes
+    useEffect(() => {
+        setIsRolling(true);
+        const timer = setTimeout(() => setIsRolling(false), 250);
+        return () => clearTimeout(timer);
+    }, [result]);
+
     if (!result)
         return
 
@@ -36,15 +45,15 @@ function RenderResult({ result, onReset }: { result?: RollResult, onReset: () =>
                 <div className="flex">
                     <h2 className="px-4">
                         Âm:
-                        <strong className="text-2xl ml-1 text-maroon">{result.amResult}</strong>
+                        <strong className={`${isRolling ? 'dice-rolling-anim' : ''} inline-block text-2xl ml-1 text-maroon tabular-nums`}>{result.amResult}</strong>
                     </h2>
                     <h2 className="px-4">
                         Bình:
-                        <strong className="text-2xl ml-1 text-purple">{result.binhResult}</strong>
+                        <strong className={`${isRolling ? 'dice-rolling-anim' : ''} inline-block text-2xl ml-1 text-purple tabular-nums`}>{result.binhResult}</strong>
                     </h2>
                     <h2 className="px-4">
                         Dương:
-                        <strong className="text-2xl ml-1 text-teal">{result.duongResult}</strong>
+                        <strong className={`${isRolling ? 'dice-rolling-anim' : ''} inline-block text-2xl ml-1 text-teal tabular-nums`}>{result.duongResult}</strong>
                     </h2>
                 </div>
                 <div className="text-center px-4 text-sm">
@@ -81,7 +90,21 @@ export default function HomePage() {
         <div className="rounded bg-beige m-2 mt-4 p-4">
             {renderTopBlock()}
 
-            <Slider defaultValue={1} min={1} max={6} onChange={timesSliderChange} />
+            <p className="text-black">Số lượng Dice:</p>
+            <Slider
+                defaultValue={1} min={1} max={6}
+                onChange={timesSliderChange}
+                className="mb-6"
+            />
+
+            <div className="text-center px-4 text-sm">
+                <button type="button"
+                    className="bg-danger hover:bg-maroon text-white font-bold py-2 px-6 rounded"
+                    onClick={btnClicked}
+                >
+                    ROLL
+                </button>
+            </div>
         </div>
     )
 }

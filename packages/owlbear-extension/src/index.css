@@ -21,3 +21,16 @@
   margin: 0 auto;
   padding: 0;
 }
+.dice-rolling-anim {
+  animation-duration: .2s;
+  animation-name: diceRolling;
+}
+@keyframes diceRolling {
+  from {
+    transform: rotate(-360deg);
+  }
+
+  to {
+    transform: rotate(0deg);
+  }
+}
