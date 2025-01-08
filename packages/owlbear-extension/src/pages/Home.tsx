@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { rollDice, type RollResult } from '@hldv/hldv-utility';
 
 
-function renderButton({ times, rollDice }) {
+function renderButton({ times, rollDice }: { times: number, rollDice: () => void }) {
     return (
         <div className="text-center mb-4 text-black">
             <button className="flex space-x-1 mx-auto items-center" onClick={rollDice}>
