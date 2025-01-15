@@ -1,6 +1,7 @@
-import { Table, Input } from 'antd';
+import { Table, Input, InputNumber, Form } from 'antd';
 import type { TableProps, ColumnType } from 'antd';
-import { useState } from 'react';
+import initCollapseMotion from 'antd/es/_util/motion';
+import React, { useState } from 'react';
 
 interface DataType {
     key: string;
@@ -8,13 +9,50 @@ interface DataType {
     sucLuc: number;
     init: number;
 }
-type ColumnTypes = Exclude<TableProps<DataType>['columns'], undefined>;
-type ExtendedColumnTypes = ColumnTypes[number] & {
+interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
+    editing: boolean;
+    dataIndex: string;
+    title: string;
+    inputType: 'number' | 'text';
+    record: DataType;
+    index: number;
     ceilClass?: string
 }
-type ExtendedCeilProps = {
-    ceilClass?: string
+
+const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
+    editing,
+    dataIndex,
+    ceilClass,
+    // title,
+    inputType,
+    // record,
+    // index,
+    children,
+    ...restProps
+}) => {
+    const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
+
+    if (ceilClass) {
+        restProps['className'] += ` ${ceilClass}`
+    }
+
+    return (
+        <td {...restProps}>
+            {
+                editing ? (
+                    <Form.Item
+                        name={dataIndex}
+                        className='m-0'
+                    >
+                        {inputNode}
+                    </Form.Item>
+                ) : children
+            }
+        </td>
+    )
 }
+
+
 
 
 export default function InitPage() {
@@ -25,6 +63,23 @@ export default function InitPage() {
     ])
     const [round, setRound] = useState<number>(0)
     const [turn, setTurn] = useState<number>(0)
+
+
+    const [form, setForm] = Form.useForm()
+    const [editingKey, setEditingKey] = useState('')
+    const isEditing = (record: DataType) => record.key === editingKey
+    const cancel = () => {
+        setEditingKey('');
+    };
+
+    const edit = (record: Partial<DataType> & { key: React.Key }) => {
+        form.setFieldsValue({
+            init: record.init,
+            name: record.name,
+            sucLuc: record.sucLuc
+        })
+        setEditingKey(record.key)
+    }
 
     const addMore = () => {
         const id = Math.random().toString()
@@ -40,45 +95,66 @@ export default function InitPage() {
         setData(data.filter(val => val?.key !== key))
     }
 
-    const defaultColumns: ExtendedColumnTypes[] = [
+    const defaultColumns = [
         {
             title: 'Init',
             dataIndex: 'init',
             key: 'init',
             ceilClass: 'w-1/6',
+            editable: true,
             sorter: {
                 compare: (a, b) => parseInt(a.key) - parseInt(b.key)
             },
-            render: (text: string) => <i>{text}</i>
         },
         {
             title: 'Tên',
             dataIndex: 'name',
             key: 'name',
-            ceilClass: 'hello',
-            render: (text) => <Input value={text} />,
+            ceilClass: 'w-1/6',
+            editable: true
         },
         {
             title: 'Sức Lực',
             dataIndex: 'sucLuc',
             key: 'sucLuc',
-            ceilClass: 'hello',
+            ceilClass: 'w-1/6',
+            editable: true,
             render: (text) => <>{text}</>,
         },
         {
             title: 'Xóa',
             dataIndex: '',
             key: 'delete',
-            ceilClass: 'hello',
-            render: (_, record) => <button onClick={() => removeRow(record.key)}>Xóa</button>
+            ceilClass: 'w-1/6',
+            render: (_, record) => {
+                const editable = isEditing(record);
+
+                return editable ? (
+                    <span>
+                        <button type="button" onClick={cancel}>Cancel</button>
+                    </span>
+                ) : (
+                    <>
+                        <button type="button" disabled={editingKey !== ''} onClick={() => edit(record)}>Edit</button>
+                        <button onClick={() => removeRow(record.key)}>Xóa</button>
+                    </>
+                )
+            }
         }
     ]
 
     const columns = defaultColumns.map((col) => {
+        if (!col.editable) {
+            return col;
+        }
+
         return {
             ...col,
-            onCell: () => ({
+            onCell: (record: DataType) => ({
                 ceilClass: col?.ceilClass,
+                inputType: col.dataIndex === 'age' ? 'number' : 'text',
+                dataIndex: col?.dataIndex,
+                editing: isEditing(record)
             }),
 
         };
@@ -89,15 +165,6 @@ export default function InitPage() {
         )
     }
 
-    // const EditableCell: React.FC<React.PropsWithChildren<ExtendedCeilProps>> = ({
-    //     children,
-    //     ceilClass,
-    //     ...restProps
-    // }) => {
-
-    //     restProps['className'] += ceilClass !== '' ? ` ${ceilClass}` : ''
-    //     return <td {...restProps}>{children}</td>
-    // }
 
     const updateFormValue = (event, fieldName: string, fieldKey: string) => {
 
@@ -112,8 +179,8 @@ export default function InitPage() {
     }
     const components = {
         body: {
-            // cell: EditableCell,
-            row: rowHandler
+            cell: EditableCell,
+            // row: rowHandler
         },
     };
 
@@ -151,16 +218,19 @@ export default function InitPage() {
                 </div>
             </div>
 
-            <Table
-                components={components}
-                columns={columns as ColumnTypes}
-                dataSource={data}
-                className="highlighted-table"
-                pagination={false}
-                rowClassName={(_, index) => {
-                    return index === turn ? 'bg-red-200' : ''
-                }}
-            />
+            <Form form={form} component={false}>
+                <Table
+                    components={components}
+                    columns={columns}
+                    dataSource={data}
+                    className="highlighted-table"
+                    pagination={false}
+                    rowClassName={(_, index) => {
+                        return index === turn ? 'bg-red-200' : ''
+                    }}
+                />
+            </Form>
+
 
             <div className="flex mt-3 space-x-5">
                 <button type='button' className='btn-default' onClick={addMore}>Thêm Đối Tượng</button>
