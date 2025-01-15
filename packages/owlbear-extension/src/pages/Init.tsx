@@ -163,7 +163,7 @@ export default function InitPage() {
             />
 
             <div className="flex mt-3 space-x-5">
-                <button type='button' onClick={addMore}>Thêm Đối Tượng</button>
+                <button type='button' className='btn-default' onClick={addMore}>Thêm Đối Tượng</button>
 
                 <button type='button'
                     className='bg-danger hover:bg-maroon text-white font-bold py-1 px-3 rounded'

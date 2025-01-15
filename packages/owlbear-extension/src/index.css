@@ -49,3 +49,11 @@
 #root .highlighted-table table {
   @apply border border-red-900;
 }
+
+.btn-default {
+  @apply border border-gray-200 bg-white text-danger font-bold py-1 px-3 rounded transition-colors;
+}
+
+.btn-default:hover {
+  @apply border-gray-200 bg-gray-100;
+}
