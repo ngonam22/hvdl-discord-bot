@@ -9,6 +9,7 @@
     "dev:web": "npm run dev -w packages/owlbear-extension",
     "dev:bot": "npm run dev -w packages/discord-bot",
     "build": "npm run build --workspaces",
+    "build:util": "npm run build -w @hldv/hldv-utility",
     "deploy:bot": "npm run deploy -w packages/discord-bot"
   }
 }
