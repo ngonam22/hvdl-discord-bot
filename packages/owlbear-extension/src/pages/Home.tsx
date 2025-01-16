@@ -2,7 +2,6 @@ import { Slider } from "antd";
 import { useEffect, useState } from "react"
 import { rollDice, type RollResult } from '@hldv/hldv-utility';
 
-
 function renderButton({ times, rollDice }: { times: number, rollDice: () => void }) {
     return (
         <div className="text-center mb-4 text-black">
@@ -38,7 +37,7 @@ function RenderResult({ result, onReset }: { result?: RollResult, onReset: () =>
                 >
                     <span className="sr-only">Close menu</span>
                     <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
 
@@ -87,7 +86,7 @@ export default function HomePage() {
     }
 
     return (
-        <div className="rounded bg-beige m-2 mt-4 p-4">
+        <div className="rounded bg-beige-200 m-2 mt-4 p-4">
             {renderTopBlock()}
 
             <p className="text-black">Số lượng Dice:</p>

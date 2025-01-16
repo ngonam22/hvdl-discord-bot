@@ -110,8 +110,9 @@ export default function InitPage() {
             title: 'Tên',
             dataIndex: 'name',
             key: 'name',
-            ceilClass: 'w-1/6',
-            editable: true
+            ceilClass: 'w-3/6 break-all',
+            editable: true,
+            render: (text: string) => <p className="break-all">{text}</p>,
         },
         {
             title: 'Sức Lực',
@@ -203,8 +204,8 @@ export default function InitPage() {
     }
 
     return (
-        <div className="rounded bg-beige m-2 mt-4 p-4">
-            <div className="text-xl text-black mb-4 flex">
+        <div className="rounded bg-beige-300 m-2 mt-4 p-4">
+            <div className="text-xl text-black mb-3 flex">
                 <div>
                     <span>Ván đấu:</span> <strong>{round}</strong>
                 </div>
@@ -223,7 +224,7 @@ export default function InitPage() {
                     components={components}
                     columns={columns}
                     dataSource={data}
-                    className="highlighted-table"
+                    className="highlighted-table shadow"
                     pagination={false}
                     rowClassName={(_, index) => {
                         return index === turn ? 'bg-red-200' : ''

@@ -14,11 +14,13 @@ if (typeof window === "undefined") {
     }
 }
 
+export interface Roll {
+    value: number;
+    rerollFrom: number | null;
+}
+
 export interface RollResult {
-    rolls: {
-        value: number;
-        rerollFrom: number | null;
-    }[];
+    rolls: Roll[];
     maxRoll: number;
     minRoll: number;
     total: number;
@@ -181,4 +183,41 @@ export function calculateDuongBinhAm(roll: number): DuongBinhAmResult {
         binhCount, 
         amCount,
     }
+}
+
+export function calculateFromRolls(rolls: Roll[]): RollResult {
+    let maxRoll = 1;
+    let minRoll = 10;
+    let total = 0;
+    let successCount = 0;
+    let duongResult = 0;
+    let binhResult = 0;
+    let amResult = 0;
+
+    rolls.forEach(roll => {
+
+        total += roll.value;
+        minRoll = Math.min(minRoll, roll.value);
+        maxRoll = Math.max(maxRoll, roll.value);
+        if (roll.value > 6) {
+            successCount++;
+        }
+
+        const { duongCount, binhCount, amCount } = calculateDuongBinhAm(roll.value)
+        duongResult += duongCount;
+        binhResult += binhCount;
+        amResult += amCount;
+    });
+
+    return {
+        rolls: rolls,
+        maxRoll: maxRoll,
+        minRoll: minRoll,
+        total: total,
+        successCount: successCount,
+        duongResult: duongResult,
+        binhResult: binhResult,
+        amResult: amResult,
+    }
+    
 }
