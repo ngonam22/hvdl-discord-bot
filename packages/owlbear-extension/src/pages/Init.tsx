@@ -1,6 +1,5 @@
 import { Table, Input, InputNumber, Form } from 'antd';
-import type { TableProps, ColumnType } from 'antd';
-import initCollapseMotion from 'antd/es/_util/motion';
+import type { TableProps } from 'antd';
 import React, { useState } from 'react';
 
 interface DataType {
@@ -51,7 +50,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
         </td>
     )
 }
-
+type ColumnTypes = Exclude<TableProps<DataType>['columns'], undefined>;
 
 
 
@@ -65,7 +64,7 @@ export default function InitPage() {
     const [turn, setTurn] = useState<number>(0)
 
 
-    const [form, setForm] = Form.useForm()
+    const [form] = Form.useForm()
     const [editingKey, setEditingKey] = useState('')
     const isEditing = (record: DataType) => record.key === editingKey
     const cancel = () => {
@@ -95,7 +94,11 @@ export default function InitPage() {
         setData(data.filter(val => val?.key !== key))
     }
 
-    const defaultColumns = [
+    const defaultColumns: (ColumnTypes[number] & { 
+        editable?: boolean; 
+        dataIndex: string;
+        ceilClass?: string
+    })[] = [
         {
             title: 'Init',
             dataIndex: 'init',
@@ -103,7 +106,7 @@ export default function InitPage() {
             ceilClass: 'w-1/6',
             editable: true,
             sorter: {
-                compare: (a, b) => parseInt(a.key) - parseInt(b.key)
+                compare: (a: DataType, b: DataType) => parseInt(a.key) - parseInt(b.key)
             },
         },
         {
@@ -120,14 +123,14 @@ export default function InitPage() {
             key: 'sucLuc',
             ceilClass: 'w-1/6',
             editable: true,
-            render: (text) => <>{text}</>,
+            render: (text: string) => <>{text}</>,
         },
         {
             title: 'Xóa',
             dataIndex: '',
             key: 'delete',
             ceilClass: 'w-1/6',
-            render: (_, record) => {
+            render: (_: any, record: DataType) => {
                 const editable = isEditing(record);
 
                 return editable ? (
@@ -160,24 +163,24 @@ export default function InitPage() {
 
         };
     });
-    const rowHandler = ({ index, ...props }) => {
-        return (
-            <tr {...props} />
-        )
-    }
+    // const rowHandler = ({ index, ...props }) => {
+    //     return (
+    //         <tr {...props} />
+    //     )
+    // }
 
 
-    const updateFormValue = (event, fieldName: string, fieldKey: string) => {
+    // const updateFormValue = (event, fieldName: string, fieldKey: string) => {
 
-        const newData = data.map(val => {
-            if (val.key !== fieldKey) {
-                return val
-            }
+    //     const newData = data.map(val => {
+    //         if (val.key !== fieldKey) {
+    //             return val
+    //         }
 
-            return { ...val, ...{ [fieldName]: event.target.value } }
-        })
-        setData(newData)
-    }
+    //         return { ...val, ...{ [fieldName]: event.target.value } }
+    //     })
+    //     setData(newData)
+    // }
     const components = {
         body: {
             cell: EditableCell,
@@ -222,7 +225,7 @@ export default function InitPage() {
             <Form form={form} component={false}>
                 <Table
                     components={components}
-                    columns={columns}
+                    columns={columns as ColumnTypes}
                     dataSource={data}
                     className="highlighted-table shadow"
                     pagination={false}
