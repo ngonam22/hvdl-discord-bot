@@ -3,7 +3,12 @@ let crypto: any;
 
 if (typeof window === "undefined") {
 // Node.js environment: Use the native `crypto` module
-    crypto = require("crypto");
+    // crypto = require("crypto");
+    crypto = {
+        randomInt: (min: number, max: number) => {
+            return Math.floor(Math.random() * (max - min + 1) + min)
+        }
+    }
 } else {
     // Browser environment: Use `crypto-browserify`
     crypto = {
