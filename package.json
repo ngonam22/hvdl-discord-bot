@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "scripts": {
-    "dev:web": "npm run dev -w packages/owlbear-extension -- --host 0.0.0.0 --port 3000",
+    "dev:web": "npm run dev -w packages/owlbear-extension -- --host 0.0.0.0 --port 10000",
     "dev:bot": "npm run dev -w packages/discord-bot",
     "build": "npm run build --workspaces",
     "build:util": "npm run build -w @hldv/hldv-utility",
