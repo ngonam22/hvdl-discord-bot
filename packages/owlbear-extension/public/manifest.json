@@ -1,9 +1,9 @@
 {
-    "name": "Hello, World!",
+    "name": "HVĐL Owlbear Extension",
     "version": "1.0.0",
     "manifest_version": 1,
     "action": {
-        "title": "Hello, World!",
+        "title": "Huyền Việt Đại Lục Owlbear Extension",
         "icon": "/icon.svg",
         "popover": "/",
         "height": 600,
