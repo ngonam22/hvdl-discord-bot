@@ -7,7 +7,7 @@ import { ConfigProvider } from 'antd';
 
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+  // <StrictMode>
     <ConfigProvider
       theme={{
         token: {
@@ -20,5 +20,5 @@ createRoot(document.getElementById('root')!).render(
       </BrowserRouter>
     </ConfigProvider>
 
-  </StrictMode>
+  // </StrictMode>
 )

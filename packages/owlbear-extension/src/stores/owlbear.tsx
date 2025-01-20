@@ -3,16 +3,19 @@ import { calculateFromRolls, type Roll, type RollResult} from '@hldv/hldv-utilit
 import {generateWords} from '@/utils/randomWord'
 
 interface OwlbearState {
+    metadataKey: string
     database: string,
     roomName: string,
     playerName: string,
 
     updateRoom: (room: string) => void
+    updatePlayerName: (name: string) => void
 
     getRollCollectionName: () => string,
 
     formatToRollHistory: (rollFirestore: RollResultFirestore) => RollHistory,
     formatToRollResultFirestore: (rollResult: RollResult) => RollResultFirestore
+    initNewMetadata: () => {}
 }
 
 export interface RollResultFirestore {
@@ -28,13 +31,15 @@ export interface RollHistory {
 }
 
 export const owlbearStore = create<OwlbearState>((set, get) => ({
+    metadataKey: 'com.huyenvietdailuc.owlbear/metadata',
     database: 'owlbear',
-    roomName: generateWords(3),
-    playerName: 'Default',
+    roomName: '',
+    playerName: '',
 
     getRollCollectionName: (): string => `${get().database}/${get().roomName}/rolls`,
 
     updateRoom: (roomName) => set(() => ({ roomName: roomName })),
+    updatePlayerName: (name) => set(() => ({ playerName: name })),
 
     formatToRollResultFirestore: (rollResult: RollResult): RollResultFirestore => ({
         rolls: rollResult.rolls,
@@ -46,6 +51,14 @@ export const owlbearStore = create<OwlbearState>((set, get) => ({
        data: calculateFromRolls(rollFirestore?.rolls),
        playerName: rollFirestore.playerName,
        timestamp: rollFirestore.timestamp
-    })
+    }),
+
+    initNewMetadata: () => {
+        return {
+            [get().metadataKey]: {
+                roomName: generateWords(3)
+            }
+        }      
+    }
 }))
 

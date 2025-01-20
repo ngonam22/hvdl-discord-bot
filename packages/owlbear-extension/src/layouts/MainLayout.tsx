@@ -10,13 +10,26 @@ export default function MainLayout() {
     useEffect(() => {
 
         OBR.onReady(async () => {
-            const {updateRoom} = owlbearStore.getState();
+            const {updateRoom, metadataKey, updatePlayerName} = owlbearStore.getState();
 
-            const roomMeta = await OBR.room.getMetadata();
-            console.log('roomMeta', roomMeta);
+            const allRoomMeta = await OBR.room.getMetadata();
             
-            console.log('OBR is ready');
+            console.log('>>>>>>>>>>> ========================== <<<<<<<<<<<');
 
+            const playerName: string = await OBR.player.getName();
+            updatePlayerName(playerName)
+
+            console.log('roomMeta', allRoomMeta);
+            let roomMeta: any = allRoomMeta[metadataKey]
+
+            if (!roomMeta) {
+                return
+            }
+
+            console.log('roomMeta', roomMeta);
+            updateRoom(roomMeta.roomName);
+
+            
         });
     }, [])
     return (

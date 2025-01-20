@@ -172,8 +172,8 @@ export function getRandomWord(firstLetterToUppercase = false) {
     return firstLetterToUppercase ? word.charAt(0).toUpperCase() + word.slice(1) : word;
 }
   
-export function generateWords(length: number = 10) {
-    return [...Array(length)].map((_, i) => getRandomWord(i === 0)).join(' ').trim() + '.';
+export function generateWords(length: number = 10, separator: string = ' ') {
+    return [...Array(length)].map((_, i) => getRandomWord(i === 0)).join(separator).trim();
 }
   
 export function randomNumber(min: number, max: number) {

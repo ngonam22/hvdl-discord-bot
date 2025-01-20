@@ -18,10 +18,7 @@ export default function HistoryPage() {
         
 
         const fetchData = async function () {
-            console.log('===----=--=--=')
-            // console.log(await OBR.room.getMetadata())
-            console.log('=-=-=----')
-            const collectionRef = query(collection(db, getRollCollectionName()), orderBy('timestamp', 'desc'), limit(3));
+            const collectionRef = query(collection(db, getRollCollectionName()), orderBy('timestamp', 'desc'), limit(5));
             const snapShot = await getDocs(collectionRef);
             snapShot.forEach(doc => {
                 
@@ -52,7 +49,7 @@ export default function HistoryPage() {
 
             <div className="mt-4 flex space-y-4 flex-col">
                 {Object.values(history).map((rollHistory, index) => (
-                    <div key={index} className="bg-beige-300 rounded-lg p-3 pb-3 pl-5 overflow-hidden relative shadow hover:shadow-xl border border-transparent hover:border-beige-600">
+                    <div key={index} className="bg-beige-300 rounded-lg p-2 pb-3 pl-5 overflow-hidden relative shadow hover:shadow-xl border border-transparent hover:border-beige-600">
                         <div className="absolute w-1.5 top-0 bottom-0 left-0 bg-beige-600"></div>
                         <div className="flex items-baseline space-x-2">
                             <h2 className="text-base first-line:uppercase first-letter:font-daybreaker first-letter:text-4xl first-letter:mr-0 first-line:tracking-widest">

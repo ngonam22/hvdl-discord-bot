@@ -1,9 +1,11 @@
-import { Slider, Input } from "antd";
+import { Slider, Input, Form, type FormProps} from "antd";
 import { useEffect, useState } from "react"
 import { rollDice, type RollResult } from '@hldv/hldv-utility';
 import { owlbearStore } from "@stores/owlbear";
 import { collection, addDoc } from "firebase/firestore";
 import {db} from "@/utils/firebase";
+import {generateWords} from '@/utils/randomWord'
+import OBR from "@owlbear-rodeo/sdk";
 
 function renderButton({ times, rollDice }: { times: number, rollDice: () => void }) {
     return (
@@ -67,21 +69,96 @@ function RenderResult({ result, onReset }: { result?: RollResult, onReset: () =>
 }
 
 function RenderOwlbearSettings() {
-    const { roomName } = owlbearStore.getState();
+    const {roomName, playerName, updateRoom, updatePlayerName, metadataKey} = owlbearStore(state => state)
+    
+    const [form] = Form.useForm()
+
+    const onFinish: FormProps['onFinish'] = (values: any) => {
+        console.log('submitted')
+        console.log(values)
+        updatePlayerName(values.playerName)
+        updateRoom(values.roomName)
+        OBR.room.setMetadata({
+            [metadataKey]: {
+                roomName: values['roomName']
+            }
+        })
+    }
+
+    useEffect(() => {
+        const formVals: any = {}
+
+        if (roomName !== '') {
+            formVals['roomName'] = roomName
+        }
+
+        if (playerName !== '') {
+            formVals['playerName'] = playerName
+        }
+
+        form.setFieldsValue(formVals)
+    }, [roomName, playerName, form])
+
+    if (roomName !== '' && playerName !== '') {
+        return
+    }
+
+    const randomRoomName: string = generateWords(3, '-')
 
     return (
-        <div className="text-left items-center bg-beige-100 border-red-900 rounded text-black  mb-4 shadow-lg py-2 px-4">
-            <div className="flex mb-2 space-x-2">
-                <span className="w-2/12">
-                    Tên Phòng:
-                </span>
-                <Input type="text" className="w-10/12" value={roomName} />
-            </div>
+        <div className="rounded bg-beige-200 m-2 mt-4 p-4">
+            <Form 
+                form={form}
+                name="metadata" autoComplete="off" 
+                onFinish={onFinish}
+                initialValues={{
+                    roomName: randomRoomName,
+                    playerName
+                }}
+            >
+                <div>Chao {roomName} - {playerName}</div>
+                <div className="text-left items-center bg-beige-100 border-red-900 rounded text-black py-2 mb-4 shadow-lg py-2 px-4">
+                    <div className="flex mb-2 space-x-2 items-center">
+                        <span className="w-1/2">
+                            Tên Phòng:
+                        </span>
+                        <Form.Item name="roomName"
+                            rules={[{required: true}]}
+                            className="w-10/12 mb-0" 
+                        >
+                            <Input />
+                        </Form.Item>
+                        
+                    </div>
 
-            <div className="flex space-x-2">
-                <span className="w-2/12">Tên người dùng:</span>
-                <Input type="text" className="w-10/12" />
-            </div>
+                    <div className="flex space-x-2 items-center">
+                        <span className="w-1/2">Tên người dùng:</span>
+                        <Form.Item name="playerName" className="w-10/12 mb-0">
+                            <Input />
+                        </Form.Item>
+                    </div>
+
+                    <div className="text-center mt-2">
+                        <button type="submit" className="btn-default mx-auto">Kết nối</button>
+                    </div>
+                </div>
+            </Form>
+        </div>
+        
+    )
+}
+
+function RenderCurrentInfo() {
+    const {roomName, playerName} = owlbearStore(state => state)
+
+    if (!roomName || !playerName) {
+        return
+    }
+
+    return (
+        <div className="rounded bg-beige-200 m-2 mt-4 p-4 text-black text-sm">
+            Player: {playerName}<br />
+            Phòng: {roomName}
         </div>
     )
 }
@@ -117,25 +194,32 @@ export default function HomePage() {
     }
 
     return (
-        <div className="rounded bg-beige-200 m-2 mt-4 p-4">
+        <>
             <RenderOwlbearSettings />
-            {renderTopBlock()}
 
-            <p className="text-black">Số lượng Dice:</p>
-            <Slider
-                defaultValue={1} min={1} max={6}
-                onChange={timesSliderChange}
-                className="mb-6"
-            />
+            <div className="rounded bg-beige-200 m-2 mt-4 p-4">
+                {renderTopBlock()}
 
-            <div className="text-center px-4 text-sm">
-                <button type="button"
-                    className="bg-danger hover:bg-maroon text-white font-bold py-2 px-6 rounded"
-                    onClick={btnClicked}
-                >
-                    ROLL
-                </button>
+                <p className="text-black">Số lượng Dice:</p>
+                <Slider
+                    defaultValue={1} min={1} max={6}
+                    onChange={timesSliderChange}
+                    className="mb-6"
+                />
+
+                <div className="text-center px-4 text-sm">
+                    <button type="button"
+                        className="bg-danger hover:bg-maroon text-white font-bold py-2 px-6 rounded"
+                        onClick={btnClicked}
+                    >
+                        ROLL
+                    </button>
+                </div>
             </div>
-        </div>
+
+            <RenderCurrentInfo />
+            
+        </>
+        
     )
 }
