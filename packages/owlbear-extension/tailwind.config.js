@@ -6,6 +6,10 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        // 'barakah': ['Barakah'],
+        'daybreaker': ['Daybreaker'],
+      },
       colors: {
         'danger': '#A31D1D',
         'maroon': '#6D2323',

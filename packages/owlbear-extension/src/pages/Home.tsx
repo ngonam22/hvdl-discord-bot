@@ -1,6 +1,9 @@
-import { Slider } from "antd";
+import { Slider, Input } from "antd";
 import { useEffect, useState } from "react"
 import { rollDice, type RollResult } from '@hldv/hldv-utility';
+import { owlbearStore } from "@stores/owlbear";
+import { collection, addDoc } from "firebase/firestore";
+import {db} from "@/utils/firebase";
 
 function renderButton({ times, rollDice }: { times: number, rollDice: () => void }) {
     return (
@@ -63,16 +66,44 @@ function RenderResult({ result, onReset }: { result?: RollResult, onReset: () =>
     )
 }
 
+function RenderOwlbearSettings() {
+    const { roomName } = owlbearStore.getState();
+
+    return (
+        <div className="text-left items-center bg-beige-100 border-red-900 rounded text-black  mb-4 shadow-lg py-2 px-4">
+            <div className="flex mb-2 space-x-2">
+                <span className="w-2/12">
+                    Tên Phòng:
+                </span>
+                <Input type="text" className="w-10/12" value={roomName} />
+            </div>
+
+            <div className="flex space-x-2">
+                <span className="w-2/12">Tên người dùng:</span>
+                <Input type="text" className="w-10/12" />
+            </div>
+        </div>
+    )
+}
+
 export default function HomePage() {
     const [times, setTimes] = useState(1);
     const [result, setResult] = useState<RollResult | null>()
+    const { getRollCollectionName, formatToRollResultFirestore } = owlbearStore.getState();
 
     const timesSliderChange = (val: number) => {
         setTimes(val)
     }
 
-    const btnClicked = () => {
-        setResult(rollDice(times))
+    const btnClicked = async () => {
+        const result: RollResult = rollDice(times);
+        const fireStoreResult = formatToRollResultFirestore(result)
+        
+
+        const collectionRef = collection(db, getRollCollectionName());
+        await addDoc(collectionRef, fireStoreResult);
+
+        setResult(result)
     }
 
     const renderTopBlock = () => {
@@ -87,6 +118,7 @@ export default function HomePage() {
 
     return (
         <div className="rounded bg-beige-200 m-2 mt-4 p-4">
+            <RenderOwlbearSettings />
             {renderTopBlock()}
 
             <p className="text-black">Số lượng Dice:</p>

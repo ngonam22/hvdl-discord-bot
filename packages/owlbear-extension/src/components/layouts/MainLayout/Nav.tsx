@@ -12,7 +12,7 @@ export default function Nav() {
                                 ` text-base px-4 py-3 lg:px-8 block`
                             }
                         >
-                            Data
+                            Roll
                         </NavLink>
                     </li>
 

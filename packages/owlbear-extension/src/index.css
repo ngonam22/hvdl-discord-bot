@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* @font-face {
+  font-family: Barakah;
+  src: url('/fonts/MTD-Barakah-Regular.otf') format("opentype");
+} */
+@font-face {
+  font-family: Daybreaker;
+  src: url('/fonts/Daybreaker.ttf') format('truetype');
+}
+
 :root {
   font-family: Bitter, serif;
   line-height: 1.5;

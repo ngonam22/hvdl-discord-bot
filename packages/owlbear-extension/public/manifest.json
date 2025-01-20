@@ -1,12 +1,15 @@
 {
-    "name": "HVĐL Owlbear Extension",
+    "name": "HVĐL Owlbear",
     "version": "1.0.0",
     "manifest_version": 1,
+    "icon": "/icon.svg",
+    "author": "Nam J",
+    "description": "Huyền Việt Đại Lục Owlbear Extension",
     "action": {
-        "title": "Huyền Việt Đại Lục Owlbear Extension",
-        "icon": "/icon.svg",
+        "title": "Huyền Việt Đại Lục Owlbear",
+        "icon": "/optimized_logo.svg",
         "popover": "/",
-        "height": 600,
-        "width": 400
+        "height": 752,
+        "width": 380
     }
 }
