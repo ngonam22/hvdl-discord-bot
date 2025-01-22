@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
 import { owlbearStore, type RollHistory, type RollResultFirestore } from "@stores/owlbear";
 import {db} from "@/utils/firebase"
-import OBR from "@owlbear-rodeo/sdk";
 
 type DbRolls = { [id: string]: RollHistory };
 
@@ -36,7 +35,7 @@ export default function HistoryPage() {
     }, [setHistory]);
 
     function formatTime(timestamp: number) {
-        const date = new Date(timestamp);
+        // const date = new Date(timestamp);
         return new Intl.DateTimeFormat('vi-VN', {
             year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit',
             hour12: false
