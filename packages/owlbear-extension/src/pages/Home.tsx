@@ -106,7 +106,8 @@ function RenderOwlbearSettings() {
     const randomRoomName: string = generateWords(3, '-')
 
     return (
-        <div className="rounded bg-beige-200 m-2 mt-4 p-4">
+        <div className="rounded bg-beige-200 m-2 mt-4 p-4 text-left">
+            <h1 className="text-xl text-black">Đăng Nhập</h1>
             <Form 
                 form={form}
                 name="metadata" autoComplete="off" 
@@ -116,31 +117,28 @@ function RenderOwlbearSettings() {
                     playerName
                 }}
             >
-                <div>Chao {roomName} - {playerName}</div>
-                <div className="text-left items-center bg-beige-100 border-red-900 rounded text-black py-2 mb-4 shadow-lg py-2 px-4">
-                    <div className="flex mb-2 space-x-2 items-center">
-                        <span className="w-1/2">
-                            Tên Phòng:
-                        </span>
-                        <Form.Item name="roomName"
-                            rules={[{required: true}]}
-                            className="w-10/12 mb-0" 
-                        >
-                            <Input />
-                        </Form.Item>
-                        
-                    </div>
+                <div className="flex mb-2 space-x-2 items-center">
+                    <span className="w-1/2">
+                        Tên Phòng:
+                    </span>
+                    <Form.Item name="roomName"
+                        rules={[{required: true}]}
+                        className="w-10/12 mb-0" 
+                    >
+                        <Input />
+                    </Form.Item>
+                    
+                </div>
 
-                    <div className="flex space-x-2 items-center">
-                        <span className="w-1/2">Tên người dùng:</span>
-                        <Form.Item name="playerName" className="w-10/12 mb-0">
-                            <Input />
-                        </Form.Item>
-                    </div>
+                <div className="flex space-x-2 items-center">
+                    <span className="w-1/2">Tên người dùng:</span>
+                    <Form.Item name="playerName" className="w-10/12 mb-0">
+                        <Input />
+                    </Form.Item>
+                </div>
 
-                    <div className="text-center mt-2">
-                        <button type="submit" className="btn-default mx-auto">Kết nối</button>
-                    </div>
+                <div className="text-center mt-2">
+                    <button type="submit" className="btn-default mx-auto">Kết nối</button>
                 </div>
             </Form>
         </div>

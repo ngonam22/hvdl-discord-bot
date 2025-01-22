@@ -52,7 +52,10 @@ export default function HistoryPage() {
                     <div key={index} className="bg-beige-300 rounded-lg p-2 pb-3 pl-5 overflow-hidden relative shadow hover:shadow-xl border border-transparent hover:border-beige-600">
                         <div className="absolute w-1.5 top-0 bottom-0 left-0 bg-beige-600"></div>
                         <div className="flex items-baseline space-x-2">
-                            <h2 className="text-base first-line:uppercase first-letter:font-daybreaker first-letter:text-4xl first-letter:mr-0 first-line:tracking-widest">
+                            <h2 
+                                className="text-base truncate first-line:uppercase first-letter:font-daybreaker first-letter:text-4xl first-letter:mr-0 first-line:tracking-widest"
+                                title={rollHistory.playerName}
+                            >
                                 {rollHistory.playerName}
                             </h2>
                             <span>-</span>
