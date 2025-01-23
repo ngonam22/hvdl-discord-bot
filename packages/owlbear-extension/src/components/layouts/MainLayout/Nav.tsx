@@ -29,7 +29,7 @@ export default function Nav() {
                         </NavLink>
                     </li>
 
-                    <li>
+                    {/* <li>
                         <NavLink
                             to="/init"
                             end
@@ -40,7 +40,7 @@ export default function Nav() {
                         >
                             Init
                         </NavLink>
-                    </li>
+                    </li> */}
                 </ul>
             </nav>
         </div>
